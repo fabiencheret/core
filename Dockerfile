@@ -24,9 +24,11 @@ RUN \
 ## Setup Home Assistant Core
 COPY . homeassistant/
 RUN \
+    pip3 install ddtrace
+RUN \
     pip3 install --no-cache-dir --no-index --only-binary=:all: --find-links "${WHEELS_LINKS}" \
     -e ./homeassistant --use-deprecated=legacy-resolver \
-    && python3 -m compileall homeassistant/homeassistant
+    && ddtrace-run python3 -m compileall homeassistant/homeassistant
 
 # Home Assistant S6-Overlay
 COPY rootfs /
